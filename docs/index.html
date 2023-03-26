@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+ <meta charset="UTF-8"> 
+ <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
+ <title>Russian obfuscator</title>
+ <style type="text/css">
+body{
+  font-size: 125%;
+}
+button{
+  height: 3rem;
+  width: 3rem;
+  font-family : inherit;
+  font-size: 100%;
+}
+#buttons_pc{
+  margin-left:0.7rem;
+}
+#buttons_phone{
+  text-align: center;
+}
+@media screen and (max-width:680px){
+  .container{
+    width: 100%;
+  }
+  .textarea_container{
+    width: 100%;
+  }
+  textarea {
+   width: 100%;
+   resize: vertical;
+   font-family : inherit;
+   font-size: 100%;
+   height: 8em;
+  }
+}
+@media screen and (min-width:680px){
+  .container{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 4rem 1fr;
+    grid-template-rows: 2rem 16em;
+  }
+  textarea {
+    width: 100%;
+    font-family : inherit;
+    font-size: 100%;
+    height: 16em;
+  }
+  #legend_gokan{
+    display: block;
+    grid-row: 1 / 2;
+    grid-column: 1 / 2;
+  }
+  #texcont_compatideo{
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+  }
+  #legend_sv{
+    white-space: nowrap; 
+    grid-row: 1 / 2;
+    grid-column: 3 / 4;
+  }
+  #texcont_sv{
+    grid-row: 2 / 3;
+    grid-column: 3 / 4;
+  }
+  #buttons_pc{
+    grid-row: 2 / 3;
+    grid-column: 2 / 3;
+  }
+}
+ </style>
+ <script type="text/javascript" src="./data.js"></script>
+ <script type="text/javascript">
+function getdict(){
+  return (Math.random() < 0.5) ? convdict : scriptlike;
+}
+function select_one(ary){
+  return ary[Math.floor(Math.random()*ary.length)];
+}
+//
+function obfuscate(){
+  text = document.forms.mainForm.plain.value;
+  dict = getdict()
+  for (key in dict){
+    text = text.replaceAll(key, select_one(dict[key]));
+  };
+  //console.log(text.length);
+  document.forms.mainForm.obfuscated.value=text;
+}
+
+function winsize_changed(){
+  if (window.matchMedia("(max-width:680px)").matches){
+    document.getElementById("buttons_pc").style.display = "none";
+    document.getElementById("buttons_phone").style.display = "block";
+  }else{
+    document.getElementById("buttons_pc").style.display = "block";
+    document.getElementById("buttons_phone").style.display = "none";
+  }
+}
+document.addEventListener('DOMContentLoaded', winsize_changed);
+window.addEventListener('resize', winsize_changed, false);
+
+ </script>
+</head>
+<body>
+<h1>Russian Obfuscator</h1>
+<p>This translates cyrillic Russian texts into similar-looking non-cyrillic char arrays.</p>
+<form name="mainForm">
+ <div class="container">
+  <legend id="legend_gokan">Cyrillic</legend>
+  <div class="textarea_container" id="texcont_compatideo">
+   <textarea name="plain"></textarea>
+  </div>
+  <div id="buttons_pc">
+   <div><button type="button" onclick="obfuscate();">→</button></div>
+  </div>
+  <div id="buttons_phone" style="display:none;">
+   <div><button type="button" onclick="obfuscate();">↓</button></div>
+  </div>
+  <legend id="legend_sv">Obfuscated</legend>
+  <div class="textarea_container" id="texcont_sv">
+   <textarea name="obfuscated"></textarea>
+  </div>
+ </div>
+</form>
+<p>Last updated: <script type="text/javascript">document.write(lastupdate);</script></p>
+</body>
+</html>
